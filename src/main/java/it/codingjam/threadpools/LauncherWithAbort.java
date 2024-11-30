@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+/**
+ * With standard rejection policy, only 5 tasks are executed (4 max pool size + 1 queue size)
+ */
 public class LauncherWithAbort {
 
     private static final Logger LOGGER = Logger.getLogger(LauncherWithAbort.class.getName());

@@ -5,9 +5,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-public class LauncherWithBackPressure {
+/**
+ * With a custom rejection policy, we retry to enqueue for max 3 seconds every rejected tasks:
+ * as result, all tasks (10) are executed because they last 1 second each
+ */
+public class LauncherWithRetry {
 
-    private static final Logger LOGGER = Logger.getLogger(LauncherWithBackPressure.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LauncherWithRetry.class.getName());
 
     public static void main(String[] args) throws InterruptedException {
         int max = 10;
@@ -18,8 +22,8 @@ public class LauncherWithBackPressure {
                 4,
                 10,
                 TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(1),
-                new BackPressurePolicy(3, TimeUnit.SECONDS)
+                new SynchronousQueue<>(true), // works with LinkedBlockingQueue<>(1) as well
+                new RetryPolicy(3, TimeUnit.SECONDS)
         )) {
             IntStream.range(0, max).forEach(i -> {
                 try {
@@ -45,12 +49,12 @@ public class LauncherWithBackPressure {
         }
     }
 
-    private static class BackPressurePolicy implements RejectedExecutionHandler {
+    private static class RetryPolicy implements RejectedExecutionHandler {
 
         private final int timeout;
         private final TimeUnit timeoutUnit;
 
-        private BackPressurePolicy(int timeout, TimeUnit timeoutUnit) {
+        private RetryPolicy(int timeout, TimeUnit timeoutUnit) {
             this.timeout = timeout;
             this.timeoutUnit = timeoutUnit;
         }
@@ -59,9 +63,11 @@ public class LauncherWithBackPressure {
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             try {
                 BlockingQueue<Runnable> queue = executor.getQueue();
+                var startWaiting = System.currentTimeMillis();
                 if (!queue.offer(r, this.timeout, this.timeoutUnit)) {
                     throw new RejectedExecutionException("Can't enqueue");
                 }
+                LOGGER.info("Rejection risked! Waited " + (System.currentTimeMillis() - startWaiting));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
