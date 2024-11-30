@@ -13,7 +13,7 @@ See comments on the classes for details
 
 ## References
 
-[Processing more than 10 SQS messages concurrently with Spring Cloud AWS Messaging](https://medium.com/conductor-r-d/processing-more-than-10-sqs-messages-concurrently-with-spring-cloud-aws-messaging-5d09ebd94abd)
-[If a task queue reaches full capacity and a task is rejected, what happens to the client? Will the client see a failed request, or does the system try to handle it through a retry mechanism?](https://medium.com/@raksmeykoung_19675/if-a-task-queue-reaches-full-capacity-and-a-task-is-rejected-what-happens-to-the-client-3c67dbf16756)
-[Introduction to Thread Pools in Java](https://www.baeldung.com/thread-pool-java-and-guava)
-[Guide to `RejectedExecutionHandler`](https://www.baeldung.com/java-rejectedexecutionhandler)
+* [Processing more than 10 SQS messages concurrently with Spring Cloud AWS Messaging](https://medium.com/conductor-r-d/processing-more-than-10-sqs-messages-concurrently-with-spring-cloud-aws-messaging-5d09ebd94abd)
+* [If a task queue reaches full capacity and a task is rejected, what happens to the client? Will the client see a failed request, or does the system try to handle it through a retry mechanism?](https://medium.com/@raksmeykoung_19675/if-a-task-queue-reaches-full-capacity-and-a-task-is-rejected-what-happens-to-the-client-3c67dbf16756)
+* [Introduction to Thread Pools in Java](https://www.baeldung.com/thread-pool-java-and-guava)
+* [Guide to `RejectedExecutionHandler`](https://www.baeldung.com/java-rejectedexecutionhandler)
